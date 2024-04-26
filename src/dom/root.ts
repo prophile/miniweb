@@ -1,8 +1,8 @@
-import { MiniNode, MiniElement } from "./component";
-import { createRootComponentInstance } from "./instance";
-import type { Driver } from "./driver";
+import { MiniNode, MiniElement } from "../component";
+import { createRootComponentInstance } from "../instance";
+import type { Driver } from "../driver";
 import { DOMDriver } from "./domDriver";
-import { LogDriver } from "./logDriver";
+import { LogDriver } from "../logDriver";
 
 interface ErrorInfo {
   cause?: Error;

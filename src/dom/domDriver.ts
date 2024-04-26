@@ -1,4 +1,4 @@
-import type { Driver } from './driver';
+import type { Driver } from '../driver';
 
 export class DOMDriver implements Driver<HTMLElement, Text, HTMLElement, Event> {
   addText(parent: HTMLElement, place: Node | null, text: string) {

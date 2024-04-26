@@ -1,7 +1,7 @@
 export type { Ref, FunctionalComponent, Component, MiniNode, MiniElement } from './component';
 export { Fragment } from './component';
 export { createElement } from './createElement';
-export { createRoot } from './root';
+export { createRoot } from './dom/root';
 export { tpl } from './tpl';
 export { render } from './compat';
 
