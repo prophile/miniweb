@@ -1,11 +1,12 @@
 export type { Ref, FunctionalComponent, Component, MiniNode, MiniElement } from './component';
-export { Fragment } from './component';
-export { createElement } from './createElement';
-export { createRoot } from './dom/root';
-export { tpl } from './tpl';
-export { render } from './compat';
 
-export {
+import { Fragment } from './component';
+import { createElement } from './createElement';
+import { createRoot } from './dom/root';
+import { tpl } from './tpl';
+import { render } from './compat';
+
+import {
   startTransition,
   useCallback,
   useDebugValue,
@@ -24,12 +25,70 @@ export {
   useTransition
 } from './hooks';
 
-export {
+import {
   createContext,
   useContext
 } from './context';
 
-export {
+import {
   memo,
   forwardRef
 } from './highorder';
+
+export {
+  Fragment,
+  createElement,
+  createRoot,
+  tpl,
+  render,
+  startTransition,
+  useCallback,
+  useDebugValue,
+  useDeferredValue,
+  useEffect,
+  useId,
+  useImperativeHandle,
+  useInsertionEffect,
+  useLayoutEffect,
+  useMemo,
+  useOptimistic,
+  useReducer,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  useTransition,
+  createContext,
+  useContext,
+  memo,
+  forwardRef
+};
+
+export const React = {
+  Fragment,
+  createElement,
+  createRoot,
+  tpl,
+  render,
+  startTransition,
+  useCallback,
+  useDebugValue,
+  useDeferredValue,
+  useEffect,
+  useId,
+  useImperativeHandle,
+  useInsertionEffect,
+  useLayoutEffect,
+  useMemo,
+  useOptimistic,
+  useReducer,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  useTransition,
+  createContext,
+  useContext,
+  memo,
+  forwardRef
+};
+
+export default React;
