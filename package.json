@@ -1,0 +1,20 @@
+{
+  "name": "miniweb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "author": "",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rollup": "^4.16.4",
+    "rollup-plugin-api-extractor": "^0.2.5",
+    "tslib": "^2.6.2",
+    "typescript": "^5.4.5"
+  }
+}
