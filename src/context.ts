@@ -1,12 +1,12 @@
-import type { MiniNode } from './component';
+import type { MiniNode } from "./component";
 
-import { createSubscribeStore } from './subscribeStore';
-import { useShared, $useReadContext, $useProvideContext } from './hookDispatcher';
-import { useEffect, useLayoutEffect, $useAutoUpdateHandle } from './hooks';
+import { createSubscribeStore } from "./subscribeStore";
+import { useShared, $useReadContext, $useProvideContext } from "./hookDispatcher";
+import { useEffect, useLayoutEffect, $useAutoUpdateHandle } from "./hooks";
 
 interface Context<T> {
-  Provider: (props: {value: T, children: MiniNode}) => MiniNode;
-  Consumer: (props: {children: (value: T) => MiniNode}) => MiniNode;
+  Provider: (props: { value: T; children: MiniNode }) => MiniNode;
+  Consumer: (props: { children: (value: T) => MiniNode }) => MiniNode;
 
   useContext(): T;
 }
@@ -16,9 +16,9 @@ export function useContext<T>(context: Context<T>): T {
 }
 
 export function createContext<T>(defaultValue?: T): Context<T> {
-  const name = Symbol('context');
+  const name = Symbol("context");
 
-  function Provider(props: {value: T, children: MiniNode}) {
+  function Provider(props: { value: T; children: MiniNode }) {
     const store = useShared(() => createSubscribeStore(props.value));
 
     useEffect(() => {
@@ -34,7 +34,7 @@ export function createContext<T>(defaultValue?: T): Context<T> {
     const store = $useReadContext(name);
     if (!store) {
       if (defaultValue === undefined) {
-        throw new Error('No context value');
+        throw new Error("No context value");
       }
       return defaultValue;
     }
@@ -48,7 +48,7 @@ export function createContext<T>(defaultValue?: T): Context<T> {
     return store.getSnapshot();
   }
 
-  function Consumer(props: {children: (value: T) => MiniNode}) {
+  function Consumer(props: { children: (value: T) => MiniNode }) {
     const value = useContext();
     return props.children(value);
   }

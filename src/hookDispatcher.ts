@@ -4,8 +4,8 @@ export interface HookDispatcher {
   useShared<T>(init: (key: string) => T): T;
   $useUpdateHandle(): (isPriority: boolean, callback?: () => void) => void;
   useLifecycleCallback(
-    point: 'insert' | 'layout' | 'effect',
-    callback: null | (() => (void | (() => void))),
+    point: "insert" | "layout" | "effect",
+    callback: null | (() => void | (() => void)),
   ): void;
   $useReadContext(context: symbol): any;
   $useProvideContext(context: symbol, value: any): void;
@@ -28,7 +28,7 @@ export function runInDispatcher<T>(dispatcher: HookDispatcher, fn: () => T): T {
 
 export function $useCurrentDispatcher(): HookDispatcher {
   if (currentDispatcher === null) {
-    throw new Error('Hooks can only be used inside a component');
+    throw new Error("Hooks can only be used inside a component");
   }
   return currentDispatcher;
 }
@@ -44,8 +44,8 @@ export function $useUpdateHandle(): (isPriority: boolean, callback?: () => void)
 }
 
 export function useLifecycleCallback(
-  point: 'insert' | 'layout' | 'effect',
-  callback: null | (() => (void | (() => void))),
+  point: "insert" | "layout" | "effect",
+  callback: null | (() => void | (() => void)),
 ): void {
   const dispatcher = $useCurrentDispatcher();
   dispatcher.useLifecycleCallback(point, callback);

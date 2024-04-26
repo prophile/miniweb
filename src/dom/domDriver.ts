@@ -1,4 +1,4 @@
-import type { Driver } from '../driver';
+import type { Driver } from "../driver";
 
 export class DOMDriver implements Driver<HTMLElement, Text, HTMLElement, Event> {
   addText(parent: HTMLElement, place: Node | null, text: string) {
@@ -11,11 +11,7 @@ export class DOMDriver implements Driver<HTMLElement, Text, HTMLElement, Event> 
     return node;
   }
 
-  addElement(
-    parent: HTMLElement,
-    place: Node | null,
-    type: string
-  ) {
+  addElement(parent: HTMLElement, place: Node | null, type: string) {
     const node = document.createElement(type);
     if (place === null) {
       parent.appendChild(node);
@@ -46,7 +42,7 @@ export class DOMDriver implements Driver<HTMLElement, Text, HTMLElement, Event> 
   placeBefore(element: HTMLElement | Text) {
     const parent = element.parentElement;
     if (!parent) {
-      throw new Error('Element has no parent');
+      throw new Error("Element has no parent");
     }
     return {
       addText(text: string) {
@@ -60,7 +56,7 @@ export class DOMDriver implements Driver<HTMLElement, Text, HTMLElement, Event> 
         return node;
       },
       ossify() {
-        const dummyNode = document.createTextNode('');
+        const dummyNode = document.createTextNode("");
         parent.insertBefore(dummyNode, element);
         return {
           addText(text: string) {

@@ -1,10 +1,10 @@
-export type { Ref, FunctionalComponent, Component, MiniNode, MiniElement } from './component';
+export type { Ref, FunctionalComponent, Component, MiniNode, MiniElement } from "./component";
 
-import { Fragment } from './component';
-import { createElement } from './createElement';
-import { createRoot } from './dom/root';
-import { tpl } from './tpl';
-import { render } from './compat';
+import { Fragment } from "./component";
+import { createElement } from "./createElement";
+import { createRoot } from "./dom/root";
+import { tpl } from "./tpl";
+import { render } from "./compat";
 
 import {
   startTransition,
@@ -22,18 +22,12 @@ import {
   useRef,
   useState,
   useSyncExternalStore,
-  useTransition
-} from './hooks';
+  useTransition,
+} from "./hooks";
 
-import {
-  createContext,
-  useContext
-} from './context';
+import { createContext, useContext } from "./context";
 
-import {
-  memo,
-  forwardRef
-} from './highorder';
+import { memo, forwardRef } from "./highorder";
 
 export {
   Fragment,
@@ -60,7 +54,7 @@ export {
   createContext,
   useContext,
   memo,
-  forwardRef
+  forwardRef,
 };
 
 export const React = {
@@ -88,7 +82,7 @@ export const React = {
   createContext,
   useContext,
   memo,
-  forwardRef
+  forwardRef,
 };
 
 export default React;

@@ -1,7 +1,12 @@
-import { useShared, $useUpdateHandle, useLifecycleCallback, $useDebugValueProvider } from './hookDispatcher';
+import {
+  useShared,
+  $useUpdateHandle,
+  useLifecycleCallback,
+  $useDebugValueProvider,
+} from "./hookDispatcher";
 
 let transitionCount: number = 0;
-let idPrefix: string = '';
+let idPrefix: string = "";
 
 export function startTransition<T>(fn: () => T): T {
   transitionCount++;
@@ -13,7 +18,7 @@ export function startTransition<T>(fn: () => T): T {
 }
 
 export function runWithIdPrefix<T>(prefix: string | null | undefined, fn: () => T): T {
-  prefix = prefix || '';
+  prefix = prefix || "";
   const oldPrefix = idPrefix;
   idPrefix = prefix;
   try {
@@ -30,16 +35,17 @@ export function $useAutoUpdateHandle(): (callback?: () => void) => void {
 
 export function useState<T>(initial: T | (() => T)): [T, (value: T | ((old: T) => T)) => void] {
   const store = useShared(() => {
-    if (typeof initial === 'function') {
-      return {value: (initial as () => T)()};
+    if (typeof initial === "function") {
+      return { value: (initial as () => T)() };
     } else {
-      return {value: initial};
+      return { value: initial };
     }
   });
   const updateHandle = $useAutoUpdateHandle();
 
   function setState(newValue: T | ((old: T) => T)) {
-    store.value = typeof newValue === 'function' ? (newValue as (old: T) => T)(store.value) : newValue;
+    store.value =
+      typeof newValue === "function" ? (newValue as (old: T) => T)(store.value) : newValue;
     updateHandle();
   }
 
@@ -60,7 +66,7 @@ export function useReducer<T, A>(
 }
 
 function useMonitor(initial: boolean, dependencies?: any[]): boolean {
-  const store = useShared(() => ({isInitial: initial, dependencies}));
+  const store = useShared(() => ({ isInitial: initial, dependencies }));
   if (store.isInitial) {
     store.isInitial = false;
     return true;
@@ -92,15 +98,15 @@ function useMonitor(initial: boolean, dependencies?: any[]): boolean {
   return false;
 }
 
-export function useRef<T>(initial: T): {current: T};
-export function useRef<T>(initial: null): {current: T | null};
-export function useRef<T>(): {current: T | null};
-export function useRef<T>(initial?: T): {current: T | null} {
-  return useShared(() => ({current: initial || null}));
+export function useRef<T>(initial: T): { current: T };
+export function useRef<T>(initial: null): { current: T | null };
+export function useRef<T>(): { current: T | null };
+export function useRef<T>(initial?: T): { current: T | null } {
+  return useShared(() => ({ current: initial || null }));
 }
 
 export function useMemo<T>(fn: () => T, dependencies?: any[]): T {
-  const store = useShared(() => ({value: fn()}));
+  const store = useShared(() => ({ value: fn() }));
   if (useMonitor(false, dependencies)) {
     store.value = fn();
   }
@@ -111,29 +117,39 @@ export function useCallback<T extends (...args: any[]) => any>(fn: T, dependenci
   return useMemo(() => fn, dependencies);
 }
 
-function useLifecycleEffect(point: 'insert' | 'layout' | 'effect', callback: () => void, dependencies?: any[]) {
+function useLifecycleEffect(
+  point: "insert" | "layout" | "effect",
+  callback: () => void,
+  dependencies?: any[],
+) {
   const shouldRun = useMonitor(true, dependencies);
   useLifecycleCallback(point, shouldRun ? callback : null);
 }
 
 export function useEffect(callback: () => void, dependencies?: any[]) {
-  useLifecycleEffect('effect', callback, dependencies);
+  useLifecycleEffect("effect", callback, dependencies);
 }
 
 export function useLayoutEffect(callback: () => void, dependencies?: any[]) {
-  useLifecycleEffect('layout', callback, dependencies);
+  useLifecycleEffect("layout", callback, dependencies);
 }
 
 export function useInsertionEffect(callback: () => void, dependencies?: any[]) {
-  useLifecycleEffect('insert', callback, dependencies);
+  useLifecycleEffect("insert", callback, dependencies);
 }
 
 // useContext is tied to <Context> and is implemented along with context
 
-export function useImperativeHandle<T>(ref: {current: T | null} | ((instance: T | null) => void), createHandle: () => T, dependencies?: any[]) {
-  const effectiveDependencies = dependencies ? [ref, createHandle, ...dependencies] : [ref, createHandle];
+export function useImperativeHandle<T>(
+  ref: { current: T | null } | ((instance: T | null) => void),
+  createHandle: () => T,
+  dependencies?: any[],
+) {
+  const effectiveDependencies = dependencies
+    ? [ref, createHandle, ...dependencies]
+    : [ref, createHandle];
   useLayoutEffect(() => {
-    if (typeof ref === 'function') {
+    if (typeof ref === "function") {
       ref(createHandle());
       return () => {
         ref(null);
@@ -187,7 +203,10 @@ export function useSyncExternalStore<T>(
   }, [subscribe, getSnapshot]);
 }
 
-export function useOptimistic<T, Opt>(state: T, applyOptimistic: (state: T, optimistic: Opt) => T): [T, (optimistic: Opt) => void] {
+export function useOptimistic<T, Opt>(
+  state: T,
+  applyOptimistic: (state: T, optimistic: Opt) => T,
+): [T, (optimistic: Opt) => void] {
   const updateHandle = $useUpdateHandle();
 
   interface Store {

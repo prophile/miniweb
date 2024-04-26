@@ -16,7 +16,7 @@ interface CreateRootOptions {
   onUncaughtError?(error: Error): void;
 }
 
-function ReactRoot(props: {value: MiniNode}) {
+function ReactRoot(props: { value: MiniNode }) {
   return props.value;
 }
 
@@ -38,17 +38,14 @@ export function createRoot(root: HTMLElement, options?: CreateRootOptions) {
     root.removeChild(root.firstChild);
   }
 
-  const rootInstance = createRootComponentInstance(
-    driver,
-    driver.placeEnd(root),
-    ReactRoot,
-    {value: null}
-  );
+  const rootInstance = createRootComponentInstance(driver, driver.placeEnd(root), ReactRoot, {
+    value: null,
+  });
 
   return {
     render(node: MiniNode) {
       if (isUnmounted) {
-        throw new Error('Root has been unmounted');
+        throw new Error("Root has been unmounted");
       }
       (rootInstance.element.props as Record<string, any>).value = node;
       rootInstance.runSync();
@@ -59,6 +56,6 @@ export function createRoot(root: HTMLElement, options?: CreateRootOptions) {
       }
       rootInstance.unmount();
       isUnmounted = true;
-    }
+    },
   };
 }

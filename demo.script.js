@@ -1,4 +1,4 @@
-import { tpl, createRoot, useEffect, useState, useCallback } from './dist/miniweb.js';
+import { tpl, createRoot, useEffect, useState, useCallback } from "./dist/miniweb.js";
 
 function Component() {
   const [count, setCount] = useState(0);
@@ -6,7 +6,7 @@ function Component() {
   useEffect(() => {
     console.log("Component mounted");
     const interval = setInterval(() => {
-      setCount(count => count + 1);
+      setCount((count) => count + 1);
     }, 1000);
     return () => {
       clearInterval(interval);

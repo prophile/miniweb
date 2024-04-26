@@ -1,15 +1,18 @@
-export type DiffResult<Left, Right> = {
-  type: 'match',
-  left: Left,
-  right: Right,
-} | {
-  type: 'delete',
-  right: Right,
-} | {
-  type: 'insert',
-  left: Left,
-  beforeRight?: Right,
-};
+export type DiffResult<Left, Right> =
+  | {
+      type: "match";
+      left: Left;
+      right: Right;
+    }
+  | {
+      type: "delete";
+      right: Right;
+    }
+  | {
+      type: "insert";
+      left: Left;
+      beforeRight?: Right;
+    };
 
 export function diff<Left, Right>(
   left: Left[],
@@ -32,9 +35,9 @@ export function diff<Left, Right>(
 
   function insert(left: Left, beforeIndex: number) {
     if (beforeIndex >= rightCount) {
-      diffs.push({type: 'insert', left});
+      diffs.push({ type: "insert", left });
     } else {
-      diffs.push({type: 'insert', left, beforeRight: right[beforeIndex]});
+      diffs.push({ type: "insert", left, beforeRight: right[beforeIndex] });
     }
   }
 
@@ -49,10 +52,10 @@ export function diff<Left, Right>(
     // handles the case where the elements aren't keyed.
     if (leftKey === rightKey) {
       if (match(leftItem, rightItem)) {
-        diffs.push({type: 'match', left: leftItem, right: rightItem});
+        diffs.push({ type: "match", left: leftItem, right: rightItem });
       } else {
         // Delete the right item and insert the left item
-        diffs.push({type: 'delete', right: rightItem});
+        diffs.push({ type: "delete", right: rightItem });
         insert(leftItem, rightIx + 1);
       }
       leftIx++;
@@ -63,7 +66,7 @@ export function diff<Left, Right>(
     // If the left key _is_ in the right keys (but not at this index) then we delete
     // the right item and pretend we never saw it.
     if (leftKey !== null && allRightKeys.has(leftKey)) {
-      diffs.push({type: 'delete', right: rightItem});
+      diffs.push({ type: "delete", right: rightItem });
       allRightKeys.delete(leftKey);
       rightIx++;
       continue;
@@ -79,11 +82,11 @@ export function diff<Left, Right>(
 
   // Handle leftovers
   while (rightIx < rightCount) {
-    diffs.push({type: 'delete', right: right[rightIx++]});
+    diffs.push({ type: "delete", right: right[rightIx++] });
   }
 
   while (leftIx < leftCount) {
-    diffs.push({type: 'insert', left: left[leftIx++]});
+    diffs.push({ type: "insert", left: left[leftIx++] });
   }
 
   // Return the diff

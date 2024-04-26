@@ -1,7 +1,7 @@
 export class LifecycleRegistry {
   private _index = 0;
   private _needsExecution = false;
-  private _lifecycles: (() => ((() => void) | void))[] = [];
+  private _lifecycles: (() => (() => void) | void)[] = [];
   private _cleanups: (null | (() => void))[] = [];
   private _executeFlags: boolean[] = [];
 
@@ -20,7 +20,7 @@ export class LifecycleRegistry {
     return this._needsExecution;
   }
 
-  useLifecycle(lifecycle: null | (() => ((() => void) | void))) {
+  useLifecycle(lifecycle: null | (() => (() => void) | void)) {
     const index = this._index++;
     if (!lifecycle) {
       return;

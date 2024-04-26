@@ -12,7 +12,7 @@ export function createSubscribeStore<T>(initialValue: T): SubscribeStore<T> {
     subscribe(callback) {
       listeners.push(callback);
       return () => {
-        listeners = listeners.filter(l => l !== callback);
+        listeners = listeners.filter((l) => l !== callback);
       };
     },
     getSnapshot() {
@@ -26,6 +26,6 @@ export function createSubscribeStore<T>(initialValue: T): SubscribeStore<T> {
       for (const listener of listeners) {
         listener();
       }
-    }
+    },
   };
 }

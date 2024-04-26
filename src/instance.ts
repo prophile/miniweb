@@ -1,22 +1,27 @@
-import type { MiniNode, MiniElement, FunctionalComponent } from './component';
-import type { HookDispatcher } from './hookDispatcher';
-import { runInDispatcher } from './hookDispatcher';
-import { Text } from './component';
+import type { MiniNode, MiniElement, FunctionalComponent } from "./component";
+import type { HookDispatcher } from "./hookDispatcher";
+import { runInDispatcher } from "./hookDispatcher";
+import { Text } from "./component";
 
-import { Driver, Place } from './driver';
-import { unpackProps } from './unpackProps';
-import { nodesToElements } from './nodesToElements';
-import { diff } from './diff';
-import { LifecycleRegistry } from './lifecycleRegistry';
+import { Driver, Place } from "./driver";
+import { unpackProps } from "./unpackProps";
+import { nodesToElements } from "./nodesToElements";
+import { diff } from "./diff";
+import { LifecycleRegistry } from "./lifecycleRegistry";
 
 class TextInstance<DElement, DText> {
   parent: Instance<DElement, DText> | null;
   driver: Driver<DElement, DText, any, any>;
   target: DText;
-  element: MiniElement & {type: typeof Text};
+  element: MiniElement & { type: typeof Text };
   currentText?: string;
 
-  constructor(parent: Instance<DElement, DText> | null, driver: Driver<DElement, DText, any, any>, target: DText, element: MiniElement & {type: typeof Text}) {
+  constructor(
+    parent: Instance<DElement, DText> | null,
+    driver: Driver<DElement, DText, any, any>,
+    target: DText,
+    element: MiniElement & { type: typeof Text },
+  ) {
     this.parent = parent;
     this.driver = driver;
     this.target = target;
@@ -43,7 +48,7 @@ class ComponentInstance<DElement, DText> {
   parent: Instance<DElement, DText> | null;
   driver: Driver<DElement, DText, any, any>;
   place: Place<DElement, DText>;
-  element: MiniElement & {type: FunctionalComponent};
+  element: MiniElement & { type: FunctionalComponent };
   isErrorBoundary: boolean = false;
   state: Map<number, any> = new Map();
   providedContext: Record<symbol, any> = {};
@@ -54,7 +59,12 @@ class ComponentInstance<DElement, DText> {
   layoutEffects: LifecycleRegistry = new LifecycleRegistry();
   insertEffects: LifecycleRegistry = new LifecycleRegistry();
 
-  constructor(parent: Instance<DElement, DText> | null, driver: Driver<DElement, DText, any, any>, place: Place<DElement, DText>, element: MiniElement & {type: FunctionalComponent}) {
+  constructor(
+    parent: Instance<DElement, DText> | null,
+    driver: Driver<DElement, DText, any, any>,
+    place: Place<DElement, DText>,
+    element: MiniElement & { type: FunctionalComponent },
+  ) {
     this.parent = parent;
     this.driver = driver;
     this.place = place;
@@ -67,7 +77,7 @@ class ComponentInstance<DElement, DText> {
     this.effects.prepare();
     this.layoutEffects.prepare();
     this.insertEffects.prepare();
-  
+
     return {
       useShared<T>(init: (key: string) => T): T {
         const index = stateIndex++;
@@ -90,18 +100,18 @@ class ComponentInstance<DElement, DText> {
             $this.runSync();
             callback?.();
           }
-          
+
           if (isPriority) {
             queueMicrotask(doUpdate);
           } else {
             setTimeout(doUpdate, 0);
           }
-        }
+        };
       },
 
       useLifecycleCallback(
-        point: 'insert' | 'layout' | 'effect',
-        callback: null | (() => (void | (() => void))),
+        point: "insert" | "layout" | "effect",
+        callback: null | (() => void | (() => void)),
       ): void {
         // Set the lifecycle
         const registry = {
@@ -115,7 +125,7 @@ class ComponentInstance<DElement, DText> {
       $useReadContext(context: symbol): any {
         let current: Instance<DElement, DText> | null = $this.parent;
         while (current) {
-          if ('providedContext' in current && context in current.providedContext) {
+          if ("providedContext" in current && context in current.providedContext) {
             return current.providedContext[context];
           }
           current = current.parent;
@@ -130,14 +140,16 @@ class ComponentInstance<DElement, DText> {
       $useErrorBoundary(): Error | Promise<any> | null {
         return interceptingError || null;
       },
-    }
+    };
   }
 
   runSync() {
     // Evaluate the functional component
     const dispatcher = this.createHookDispatcher();
 
-    const node = runInDispatcher(dispatcher, () => this.element.type(this.element.props, this.element.ref));
+    const node = runInDispatcher(dispatcher, () =>
+      this.element.type(this.element.props, this.element.ref),
+    );
 
     if (node === this.previousRender) {
       return;
@@ -151,7 +163,9 @@ class ComponentInstance<DElement, DText> {
       } catch (error) {
         // Re-run the component in error boundary mode
         const errorDispatcher = this.createHookDispatcher(error);
-        const errorNode = runInDispatcher(errorDispatcher, () => this.element.type(this.element.props, this.element.ref));
+        const errorNode = runInDispatcher(errorDispatcher, () =>
+          this.element.type(this.element.props, this.element.ref),
+        );
         if (errorNode === this.previousRender) {
           return;
         }
@@ -213,14 +227,19 @@ class ElementInstance<DElement, DText> {
   parent: Instance<DElement, DText> | null;
   driver: Driver<DElement, DText, any, any>;
   target: DElement;
-  element: MiniElement & {type: string};
+  element: MiniElement & { type: string };
   currentClasses: string[];
   currentStyles: Record<string, string>;
   currentAttributes: Record<string, string>;
   currentListeners: Record<string, (event: any) => void>;
   currentChildren: Instance<DElement, DText>[];
 
-  constructor(parent: Instance<DElement, DText> | null, driver: Driver<DElement, DText, any, any>, target: DElement, element: MiniElement & {type: string}) {
+  constructor(
+    parent: Instance<DElement, DText> | null,
+    driver: Driver<DElement, DText, any, any>,
+    target: DElement,
+    element: MiniElement & { type: string },
+  ) {
     this.parent = parent;
     this.driver = driver;
     this.target = target;
@@ -233,7 +252,7 @@ class ElementInstance<DElement, DText> {
   }
 
   runSync() {
-    const {classes, styles, attributes, listeners} = unpackProps(this.element.props);
+    const { classes, styles, attributes, listeners } = unpackProps(this.element.props);
 
     // Synchronize ref
     if (this.element.ref) {
@@ -241,13 +260,13 @@ class ElementInstance<DElement, DText> {
     }
 
     // Synchronize classes
-    const addedClasses = classes.filter(c => !this.currentClasses.includes(c));
-    const removedClasses = this.currentClasses.filter(c => !classes.includes(c));
+    const addedClasses = classes.filter((c) => !this.currentClasses.includes(c));
+    const removedClasses = this.currentClasses.filter((c) => !classes.includes(c));
     if (addedClasses.length > 0 || removedClasses.length > 0) {
       this.driver.updateClasses(this.target, addedClasses, removedClasses);
       this.currentClasses = classes;
     }
-    
+
     // Synchronize styles
     // These are just a straight diff - if any style is different, we update it
     let stylesChanged = false;
@@ -298,7 +317,12 @@ class ElementInstance<DElement, DText> {
     }
 
     // Synchronize children
-    this.currentChildren = syncChildren(this, this.currentChildren, this.element.children, this.driver.placeEnd(this.target));
+    this.currentChildren = syncChildren(
+      this,
+      this.currentChildren,
+      this.element.children,
+      this.driver.placeEnd(this.target),
+    );
   }
 
   unmount() {
@@ -313,7 +337,10 @@ class ElementInstance<DElement, DText> {
   }
 }
 
-export type Instance<DElement, DText> = TextInstance<DElement, DText> | ComponentInstance<DElement, DText> | ElementInstance<DElement, DText>;
+export type Instance<DElement, DText> =
+  | TextInstance<DElement, DText>
+  | ComponentInstance<DElement, DText>
+  | ElementInstance<DElement, DText>;
 
 export function createRootComponentInstance<DElement, DText>(
   driver: Driver<DElement, DText, any, any>,
@@ -357,39 +384,46 @@ function syncChildren<DElement, DText>(
 
   const newChildren: Instance<DElement, DText>[] = [];
   for (const result of diffResult) {
-    if (result.type === 'match') {
+    if (result.type === "match") {
       // Synchronize the matched element
       result.right.element = result.left;
       // TODO: Run the sync in the queue
       result.right.runSync();
       newChildren.push(result.right);
-    }
-    else if (result.type === 'delete') {
+    } else if (result.type === "delete") {
       result.right.unmount();
-    }
-    else if (result.type === 'insert') {
+    } else if (result.type === "insert") {
       const place = result.beforeRight ? result.beforeRight.placeBefore() : appendPlace;
       // Create the new element
       if (result.left.type === Text) {
         const textNode = place.addText(result.left.props.text);
         const instance = new TextInstance(parent, driver, textNode, result.left);
         newChildren.push(instance);
-      } else if (typeof result.left.type === 'string') {
+      } else if (typeof result.left.type === "string") {
         const element = place.addElement(result.left.type);
-        const instance = new ElementInstance(parent, driver, element, result.left as MiniElement & {type: string});
+        const instance = new ElementInstance(
+          parent,
+          driver,
+          element,
+          result.left as MiniElement & { type: string },
+        );
         // TODO: Run the sync in the queue – maybe? Do we want to run all _element_ syncs immediately?
         instance.runSync();
         newChildren.push(instance);
       } else {
         // Functional component
-        const component = new ComponentInstance(parent, driver, place.ossify(), result.left as MiniElement & {type: FunctionalComponent});
+        const component = new ComponentInstance(
+          parent,
+          driver,
+          place.ossify(),
+          result.left as MiniElement & { type: FunctionalComponent },
+        );
         // TODO: Run the sync in the queue
         component.runSync();
         newChildren.push(component);
       }
-    }
-    else {
-      throw new Error('Unexpected diff result');
+    } else {
+      throw new Error("Unexpected diff result");
     }
   }
 
