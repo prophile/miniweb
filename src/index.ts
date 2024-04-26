@@ -29,6 +29,8 @@ import { createContext, useContext } from "./context";
 
 import { memo, forwardRef } from "./highorder";
 
+import ErrorBoundary from "./components/ErrorBoundary";
+
 export {
   Fragment,
   createElement,
@@ -55,6 +57,7 @@ export {
   useContext,
   memo,
   forwardRef,
+  ErrorBoundary,
 };
 
 export const React = {
@@ -83,6 +86,7 @@ export const React = {
   useContext,
   memo,
   forwardRef,
+  ErrorBoundary,
 };
 
 export default React;

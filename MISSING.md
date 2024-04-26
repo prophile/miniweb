@@ -2,7 +2,6 @@ Missing features
 ================
 
 - `<Suspense>`
-- `<ErrorBoundary>`
 - `<Profiler>`
 - `<StrictMode>`
 - `useActionState` 🧪
