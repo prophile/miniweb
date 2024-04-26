@@ -1,5 +1,5 @@
-import { useState } from './useState';
-import { useLayoutEffect } from './useLayoutEffect';
+import { useState } from "./useState";
+import { useLayoutEffect } from "./useLayoutEffect";
 
 export function useSyncExternalStore<T>(
   subscribe: (callback: () => void) => () => void,

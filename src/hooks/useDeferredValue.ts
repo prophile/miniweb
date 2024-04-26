@@ -1,5 +1,5 @@
-import { useState } from './useState';
-import { startTransition } from './transitions';
+import { useState } from "./useState";
+import { startTransition } from "./transitions";
 
 export function useDeferredValue<T>(value: T): T {
   const [deferredValue, setDeferredValue] = useState(() => value);

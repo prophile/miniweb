@@ -1,4 +1,4 @@
-import { $useCurrentDispatcher } from './useCurrentDispatcher';
+import { $useCurrentDispatcher } from "./useCurrentDispatcher";
 
 export function $useReadContext(context: symbol): any {
   const dispatcher = $useCurrentDispatcher();

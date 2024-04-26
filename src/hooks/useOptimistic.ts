@@ -1,5 +1,5 @@
-import { $useUpdateHandle } from './useUpdateHandle';
-import { useShared } from './useShared';
+import { $useUpdateHandle } from "./useUpdateHandle";
+import { useShared } from "./useShared";
 
 export function useOptimistic<T, Opt>(
   state: T,

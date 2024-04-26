@@ -1,4 +1,4 @@
-import { $useCurrentDispatcher } from './useCurrentDispatcher';
+import { $useCurrentDispatcher } from "./useCurrentDispatcher";
 
 export function $useDebugValueProvider(provider: () => any): void {
   const dispatcher = $useCurrentDispatcher();

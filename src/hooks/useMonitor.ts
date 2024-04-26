@@ -1,4 +1,4 @@
-import { useShared } from './useShared';
+import { useShared } from "./useShared";
 
 export function useMonitor(initial: boolean, dependencies?: any[]): boolean {
   const store = useShared(() => ({ isInitial: initial, dependencies }));

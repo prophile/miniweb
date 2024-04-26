@@ -1,5 +1,5 @@
-import { useState } from './useState';
-import { startTransition } from './transitions';
+import { useState } from "./useState";
+import { startTransition } from "./transitions";
 
 export function useTransition<T>(): [boolean, (callback: () => T) => T] {
   const [inTransition, setInTransition] = useState(false);
