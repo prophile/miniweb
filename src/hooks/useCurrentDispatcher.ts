@@ -1,0 +1,1 @@
+export { $useCurrentDispatcher } from "../hookDispatcher";

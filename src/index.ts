@@ -23,7 +23,7 @@ import {
   useState,
   useSyncExternalStore,
   useTransition,
-} from "./hooks";
+} from "./hooks/index";
 
 import { createContext, useContext } from "./context";
 

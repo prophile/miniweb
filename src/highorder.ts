@@ -1,7 +1,7 @@
 // High-order components
 
 import { FunctionalComponent } from "./component";
-import { useMemo } from "./hooks";
+import { useMemo } from "./hooks/index";
 
 export function memo(Component: FunctionalComponent): FunctionalComponent {
   return function Memoized(props, ref) {

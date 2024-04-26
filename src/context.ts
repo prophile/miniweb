@@ -1,8 +1,11 @@
 import type { MiniNode } from "./component";
 
 import { createSubscribeStore } from "./subscribeStore";
-import { useShared, $useReadContext, $useProvideContext } from "./hookDispatcher";
-import { useEffect, useLayoutEffect, $useAutoUpdateHandle } from "./hooks";
+import { useShared } from "./hooks/useShared";
+import { $useReadContext } from "./hooks/useReadContext";
+import { $useProvideContext } from "./hooks/useProvideContext";
+import { useEffect, useLayoutEffect } from "./hooks/index";
+import { $useAutoUpdateHandle } from "./hooks/useAutoUpdateHandle";
 
 interface Context<T> {
   Provider: (props: { value: T; children: MiniNode }) => MiniNode;
