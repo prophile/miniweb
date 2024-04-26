@@ -100,7 +100,7 @@ export function useRef<T>(initial?: T): {current: T | null} {
 }
 
 export function useMemo<T>(fn: () => T, dependencies?: any[]): T {
-  const store = useShared(() => ({value: fn(), dependencies}));
+  const store = useShared(() => ({value: fn()}));
   if (useMonitor(false, dependencies)) {
     store.value = fn();
   }
