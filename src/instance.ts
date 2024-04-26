@@ -180,7 +180,6 @@ class ComponentInstance<DElement, DText> {
       });
     }
     if (this.effects.mustExecute()) {
-      console.log("effects", this.effects);
       setTimeout(() => {
         if (this.isUnmounted) {
           return;
@@ -356,8 +355,6 @@ function syncChildren<DElement, DText>(
     (right: Instance<DElement, DText>) => right.element.key || null,
   );
 
-  console.log("syncChildren", previousChildren, currentChildren, diffResult);
-
   const newChildren: Instance<DElement, DText>[] = [];
   for (const result of diffResult) {
     if (result.type === 'match') {
@@ -372,7 +369,6 @@ function syncChildren<DElement, DText>(
     }
     else if (result.type === 'insert') {
       const place = result.beforeRight ? result.beforeRight.placeBefore() : appendPlace;
-      console.log("insert", result.left);
       // Create the new element
       if (result.left.type === Text) {
         const textNode = place.addText(result.left.props.text);

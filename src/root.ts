@@ -20,7 +20,7 @@ function ReactRoot(props: {value: MiniNode}) {
   return props.value;
 }
 
-const __LOG__: boolean = true;
+const __LOG__: boolean = false;
 
 export function createRoot(root: HTMLElement, options?: CreateRootOptions) {
   let driver: Driver<HTMLElement, Text, HTMLElement, Event> = new DOMDriver();
