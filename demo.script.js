@@ -1,4 +1,4 @@
-import { tpl, createRoot, useEffect, useState } from './dist/miniweb.js';
+import { tpl, createRoot, useEffect, useState, useCallback } from './dist/miniweb.js';
 
 function Component() {
   const [count, setCount] = useState(0);
@@ -14,9 +14,9 @@ function Component() {
     };
   }, []);
 
-  function increment() {
+  const increment = useCallback(() => {
     setCount((count) => count + 1);
-  }
+  });
 
   return tpl`<div>
     ${count}
