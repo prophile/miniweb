@@ -8,7 +8,7 @@ import { unpackProps } from "./unpackProps";
 import { nodesToElements } from "./nodesToElements";
 import { diff } from "./diff";
 import { LifecycleRegistry } from "./lifecycleRegistry";
-import { enqueueTask } from "./nonUrgentQueue";
+import { enqueueTask } from "./taskQueue";
 import { startTransition } from "./transitions";
 
 class TextInstance<DElement, DText> {

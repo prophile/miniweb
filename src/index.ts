@@ -28,7 +28,7 @@ import {
 import { createContext, useContext } from "./context";
 
 import { memo, forwardRef } from "./highorder";
-import { flushSync } from "./nonUrgentQueue";
+import { flushSync } from "./taskQueue";
 
 import ErrorBoundary from "./components/ErrorBoundary";
 import StrictMode from "./components/StrictMode";
