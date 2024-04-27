@@ -31,6 +31,7 @@ import { memo, forwardRef } from "./highorder";
 import { flushSync } from "./nonUrgentQueue";
 
 import ErrorBoundary from "./components/ErrorBoundary";
+import StrictMode from "./components/StrictMode";
 
 export {
   Fragment,
@@ -59,6 +60,7 @@ export {
   memo,
   forwardRef,
   ErrorBoundary,
+  StrictMode,
   flushSync,
 };
 
@@ -89,6 +91,7 @@ export const React = {
   memo,
   forwardRef,
   ErrorBoundary,
+  StrictMode,
   flushSync,
 };
 
