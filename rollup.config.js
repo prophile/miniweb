@@ -35,5 +35,8 @@ export default {
       sourceMap: true,
       declarationDir: 'dist/types',
     },
-  }), apiExtractor(), isProduction && terser()]
+  }), apiExtractor(), isProduction && terser({
+    ecma: 2020,
+    module: true,
+  })]
 }
