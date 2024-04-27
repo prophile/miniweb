@@ -33,6 +33,8 @@ import { flushSync } from "./nonUrgentQueue";
 import ErrorBoundary from "./components/ErrorBoundary";
 import StrictMode from "./components/StrictMode";
 
+import { renderStaticHTML } from "./static/static";
+
 export {
   Fragment,
   createElement,
@@ -62,6 +64,7 @@ export {
   ErrorBoundary,
   StrictMode,
   flushSync,
+  renderStaticHTML,
 };
 
 export const React = {
@@ -93,6 +96,7 @@ export const React = {
   ErrorBoundary,
   StrictMode,
   flushSync,
+  renderStaticHTML,
 };
 
 export default React;
