@@ -84,7 +84,13 @@ export function enqueueTask(fn: () => void, urgent?: boolean) {
     urgent = !isTransitioning();
   }
   const queue = urgent ? urgentQueue : nonUrgentQueue;
+  if (wrapTask !== null) {
+    fn = wrapTask(fn);
+  }
   queue.push(fn);
+  if (onQueueTask !== null) {
+    onQueueTask();
+  }
   if (!isRunnerScheduled) {
     isRunnerScheduled = true;
     queueMicrotask(runTasks);
