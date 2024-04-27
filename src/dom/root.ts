@@ -1,7 +1,7 @@
 import { MiniNode, MiniElement } from "../component";
 import { createRootComponentInstance } from "../instance";
 import type { Driver } from "../driver";
-import { DOMDriver } from "./domDriver";
+import { HTMLDOMDriver } from "./domDriver";
 import { LogDriver } from "../logDriver";
 
 interface ErrorInfo {
@@ -23,7 +23,7 @@ function ReactRoot(props: { value: MiniNode }) {
 const __LOG__: boolean = false;
 
 export function createRoot(root: HTMLElement, options?: CreateRootOptions) {
-  let driver: Driver<HTMLElement, Text, HTMLElement, Event> = new DOMDriver();
+  let driver: Driver<HTMLElement, Text, HTMLElement, Event> = new HTMLDOMDriver();
 
   if (__LOG__) {
     driver = new LogDriver(driver);
