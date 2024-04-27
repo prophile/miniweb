@@ -2,12 +2,13 @@ import type { Driver } from "../driver";
 
 export abstract class GenericDOMDriver<E extends Element> implements Driver<E, Text, E, Event> {
   abstract createElement(type: string): E;
+  abstract createTextNode(text: string): Text;
 
   placeEnd(parent: E) {
     const $this = this;
     return {
       addText(text: string) {
-        const node = document.createTextNode(text);
+        const node = $this.createTextNode(text);
         parent.appendChild(node);
         return node;
       },
@@ -30,7 +31,7 @@ export abstract class GenericDOMDriver<E extends Element> implements Driver<E, T
     }
     return {
       addText(text: string) {
-        const node = document.createTextNode(text);
+        const node = $this.createTextNode(text);
         parent.insertBefore(node, element);
         return node;
       },
@@ -40,11 +41,11 @@ export abstract class GenericDOMDriver<E extends Element> implements Driver<E, T
         return node;
       },
       ossify() {
-        const dummyNode = document.createTextNode("");
+        const dummyNode = $this.createTextNode("");
         parent.insertBefore(dummyNode, element);
         return {
           addText(text: string) {
-            const node = document.createTextNode(text);
+            const node = $this.createTextNode(text);
             parent.insertBefore(node, dummyNode);
             return node;
           },
@@ -108,6 +109,10 @@ export abstract class GenericDOMDriver<E extends Element> implements Driver<E, T
 export class HTMLDOMDriver extends GenericDOMDriver<HTMLElement> {
   createElement(type: string) {
     return document.createElement(type);
+  }
+
+  createTextNode(text: string) {
+    return document.createTextNode(text);
   }
 
   updateStyles(element: HTMLElement, styles: Record<string, string>) {
