@@ -88,8 +88,13 @@ export abstract class GenericDOMDriver<E extends Element> implements Driver<E, T
     element.removeAttribute(attr);
   }
 
-  abstract addListener(element: E, event: string, listener: (event: Event) => void): void;
-  abstract removeListener(element: E, event: string, listener: (event: Event) => void): void;
+  addListener(element: E, event: string, listener: (event: Event) => void) {
+    element.addEventListener(event, listener);
+  }
+
+  removeListener(element: E, event: string, listener: (event: Event) => void) {
+    element.removeEventListener(event, listener);
+  }
 
   getNativeHandle(element: E) {
     return element;
@@ -109,13 +114,5 @@ export class HTMLDOMDriver extends GenericDOMDriver<HTMLElement> {
     for (const [key, value] of Object.entries(styles)) {
       element.style.setProperty(key, value);
     }
-  }
-
-  addListener(element: HTMLElement, event: string, listener: (event: Event) => void) {
-    element.addEventListener(event, listener);
-  }
-
-  removeListener(element: HTMLElement, event: string, listener: (event: Event) => void) {
-    element.removeEventListener(event, listener);
   }
 }
