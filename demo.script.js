@@ -1,4 +1,11 @@
-import { tpl, createRoot, useEffect, useState, useCallback } from "./dist/miniweb.js";
+import {
+  tpl,
+  createRoot,
+  useEffect,
+  useState,
+  useCallback,
+  useTransition,
+} from "./dist/miniweb.js";
 
 function Component() {
   const [count, setCount] = useState(0);
@@ -14,8 +21,12 @@ function Component() {
     };
   }, []);
 
+  const [isPending, startTransition] = useTransition();
+
   const increment = useCallback(() => {
-    setCount((count) => count + 1);
+    startTransition(() => {
+      setCount((count) => count + 1);
+    });
   });
 
   return tpl`<div>

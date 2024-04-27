@@ -8,6 +8,8 @@ import { unpackProps } from "./unpackProps";
 import { nodesToElements } from "./nodesToElements";
 import { diff } from "./diff";
 import { LifecycleRegistry } from "./lifecycleRegistry";
+import { runAuto, runNonUrgent } from "./nonUrgentQueue";
+import { startTransition } from "./transitions";
 
 class TextInstance<DElement, DText> {
   parent: Instance<DElement, DText> | null;
@@ -104,7 +106,9 @@ class ComponentInstance<DElement, DText> {
           if (isPriority) {
             queueMicrotask(doUpdate);
           } else {
-            setTimeout(doUpdate, 0);
+            runNonUrgent(() => {
+              startTransition(doUpdate);
+            });
           }
         };
       },
@@ -387,8 +391,7 @@ function syncChildren<DElement, DText>(
     if (result.type === "match") {
       // Synchronize the matched element
       result.right.element = result.left;
-      // TODO: Run the sync in the queue
-      result.right.runSync();
+      runAuto(() => result.right.runSync());
       newChildren.push(result.right);
     } else if (result.type === "delete") {
       result.right.unmount();
@@ -407,7 +410,7 @@ function syncChildren<DElement, DText>(
           element,
           result.left as MiniElement & { type: string },
         );
-        // TODO: Run the sync in the queue – maybe? Do we want to run all _element_ syncs immediately?
+        // Element syncs we deliberately always do synchronously, so no runAuto here
         instance.runSync();
         newChildren.push(instance);
       } else {
@@ -418,8 +421,7 @@ function syncChildren<DElement, DText>(
           place.ossify(),
           result.left as MiniElement & { type: FunctionalComponent },
         );
-        // TODO: Run the sync in the queue
-        component.runSync();
+        runAuto(() => component.runSync());
         newChildren.push(component);
       }
     } else {

@@ -22,4 +22,3 @@ Missing features
 - Server components
 - Class components
 - Deprecated APIs in general
-- Concurrent React
