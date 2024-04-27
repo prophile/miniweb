@@ -87,7 +87,7 @@ export class LogDriver<DElement, DText, DNative, DEvent> {
     return this.driver.getNativeHandle(element);
   }
 
-  isText(node: any): any {
+  isText(node: DElement | DText): node is DText {
     return this.driver.isText(node);
   }
 }

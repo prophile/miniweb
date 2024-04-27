@@ -101,7 +101,7 @@ export abstract class GenericDOMDriver<E extends Element> implements Driver<E, T
     return element;
   }
 
-  isText(node: Text | E): any {
+  isText(node: Text | E): node is Text {
     return node instanceof Text;
   }
 }

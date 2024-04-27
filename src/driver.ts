@@ -26,6 +26,5 @@ export interface Driver<DElement, DText, DNative, DEvent> {
   // Native handles (for refs)
   getNativeHandle(element: DElement): DNative;
 
-  isText(node: DText): true;
-  isText(node: DElement): false;
+  isText(node: DText | DElement): node is DText;
 }
