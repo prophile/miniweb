@@ -28,6 +28,7 @@ import {
 import { createContext, useContext } from "./context";
 
 import { memo, forwardRef } from "./highorder";
+import { flushSync } from "./nonUrgentQueue";
 
 import ErrorBoundary from "./components/ErrorBoundary";
 
@@ -58,6 +59,7 @@ export {
   memo,
   forwardRef,
   ErrorBoundary,
+  flushSync,
 };
 
 export const React = {
@@ -87,6 +89,7 @@ export const React = {
   memo,
   forwardRef,
   ErrorBoundary,
+  flushSync,
 };
 
 export default React;

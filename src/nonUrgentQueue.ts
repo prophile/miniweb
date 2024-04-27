@@ -3,39 +3,90 @@ import { isTransitioning } from "./transitions";
 const maximumBlockTimeMS = 5;
 const releaseTimeMS = 1000 / 60;
 
+const urgentQueue: (() => void)[] = [];
 const nonUrgentQueue: (() => void)[] = [];
-let nonUrgentTaskQueued = false;
+let isRunnerScheduled = false;
 
-function runNonUrgentTasks() {
-  if (nonUrgentQueue.length === 0) {
-    nonUrgentTaskQueued = false;
-    return;
+function nextTask(): { task: () => void; urgent: boolean } | null {
+  if (urgentQueue.length > 0) {
+    return { task: urgentQueue.shift()!, urgent: true };
   }
-
-  const start = performance.now();
-  do {
-    nonUrgentQueue.shift()();
-  } while (nonUrgentQueue.length > 0 && performance.now() - start < maximumBlockTimeMS);
-
   if (nonUrgentQueue.length > 0) {
-    setTimeout(runNonUrgentTasks, releaseTimeMS);
-  } else {
-    nonUrgentTaskQueued = false;
+    return { task: nonUrgentQueue.shift()!, urgent: false };
+  }
+  return null;
+}
+
+// This auto-wrapping mechanism is for `flushSync`
+type TaskWrapper = (task: () => void) => () => void;
+let wrapTask: TaskWrapper | null = null;
+let onQueueTask: (() => void) | null = null;
+
+function runWithTaskWrapper<T>(wrapper: TaskWrapper, onQueue: () => void, fn: () => T): T {
+  const oldWrapTask = wrapTask;
+  const oldOnQueueTask = onQueueTask;
+  wrapTask = wrapper;
+  onQueueTask = onQueue;
+  try {
+    return fn();
+  } finally {
+    wrapTask = oldWrapTask;
+    onQueueTask = oldOnQueueTask;
   }
 }
 
-export function runNonUrgent(fn: () => void): void {
-  nonUrgentQueue.push(fn);
-  if (!nonUrgentTaskQueued) {
-    nonUrgentTaskQueued = true;
-    queueMicrotask(runNonUrgentTasks);
+function runTasksUntilCondition(predicate: () => boolean) {
+  while (true) {
+    const task = nextTask();
+    if (task === null) {
+      break;
+    }
+    task.task();
+    if (predicate()) {
+      break;
+    }
   }
 }
 
-export function runAuto(fn: () => void): void {
-  if (isTransitioning()) {
-    runNonUrgent(fn);
+function runTasks() {
+  const start = performance.now();
+  runTasksUntilCondition(
+    () => urgentQueue.length === 0 && performance.now() - start > maximumBlockTimeMS,
+  );
+
+  const shouldReschedule = urgentQueue.length > 0 || nonUrgentQueue.length > 0;
+  if (shouldReschedule) {
+    setTimeout(runTasks, releaseTimeMS);
   } else {
-    queueMicrotask(fn);
+    isRunnerScheduled = false;
+  }
+}
+
+export function flushSync<T>(fn: () => T): T {
+  let numOutstandingSyncTasks = 0;
+  function wrapper(task: () => void) {
+    return () => {
+      task();
+      --numOutstandingSyncTasks;
+    };
+  }
+  function onQueue() {
+    numOutstandingSyncTasks++;
+  }
+  const result = runWithTaskWrapper(wrapper, onQueue, fn);
+  // Run all tasks until there are no more sync tasks
+  runTasksUntilCondition(() => numOutstandingSyncTasks === 0);
+  return result;
+}
+
+export function enqueueTask(fn: () => void, urgent?: boolean) {
+  if (urgent === undefined) {
+    urgent = !isTransitioning();
+  }
+  const queue = urgent ? urgentQueue : nonUrgentQueue;
+  queue.push(fn);
+  if (!isRunnerScheduled) {
+    isRunnerScheduled = true;
+    queueMicrotask(runTasks);
   }
 }

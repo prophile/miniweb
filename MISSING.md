@@ -17,7 +17,6 @@ Missing features
 - `preinitModule` 🧪
 - `preload` 🧪
 - `preloadModule` 🧪
-- `flushSync`
 - `hydrateRoot`
 - Server components
 - Class components

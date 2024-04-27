@@ -8,7 +8,7 @@ import { unpackProps } from "./unpackProps";
 import { nodesToElements } from "./nodesToElements";
 import { diff } from "./diff";
 import { LifecycleRegistry } from "./lifecycleRegistry";
-import { runAuto, runNonUrgent } from "./nonUrgentQueue";
+import { enqueueTask } from "./nonUrgentQueue";
 import { startTransition } from "./transitions";
 
 class TextInstance<DElement, DText> {
@@ -106,9 +106,9 @@ class ComponentInstance<DElement, DText> {
           if (isPriority) {
             queueMicrotask(doUpdate);
           } else {
-            runNonUrgent(() => {
+            enqueueTask(() => {
               startTransition(doUpdate);
-            });
+            }, false);
           }
         };
       },
@@ -391,7 +391,7 @@ function syncChildren<DElement, DText>(
     if (result.type === "match") {
       // Synchronize the matched element
       result.right.element = result.left;
-      runAuto(() => result.right.runSync());
+      enqueueTask(() => result.right.runSync());
       newChildren.push(result.right);
     } else if (result.type === "delete") {
       result.right.unmount();
@@ -421,7 +421,7 @@ function syncChildren<DElement, DText>(
           place.ossify(),
           result.left as MiniElement & { type: FunctionalComponent },
         );
-        runAuto(() => component.runSync());
+        enqueueTask(() => component.runSync());
         newChildren.push(component);
       }
     } else {
