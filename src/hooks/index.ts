@@ -1,4 +1,3 @@
-import { startTransition } from "./transitions";
 import { useState } from "./useState";
 import { useReducer } from "./useReducer";
 import { useRef } from "./useRef";
@@ -15,7 +14,6 @@ import { useOptimistic } from "./useOptimistic";
 import { useDeferredValue } from "./useDeferredValue";
 import { useId } from "./useId";
 export {
-  startTransition,
   useState,
   useReducer,
   useRef,

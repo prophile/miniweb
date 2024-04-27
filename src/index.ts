@@ -6,8 +6,8 @@ import { createRoot } from "./dom/root";
 import { tpl } from "./tpl";
 import { render } from "./compat";
 
+import { startTransition } from "./transitions";
 import {
-  startTransition,
   useCallback,
   useDebugValue,
   useDeferredValue,
